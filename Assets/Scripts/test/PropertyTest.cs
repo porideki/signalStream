@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UniRx;
 using Assets.Scripts.porideki.gates;
 using Assets.Scripts.porideki.parts;
+using Assets.Scripts.porideki.util;
 
 public class PropertyTest : MonoBehaviour {
 
@@ -30,6 +31,9 @@ public class PropertyTest : MonoBehaviour {
                 divGate.dividendSocket.Set(position.x);
                 divGate.divisorSocket.Set(position.y);
             });
+
+        var range = new Range(100, 0);
+        Debug.Log("[" + range.min + ", " + range.max + "]");
 
     }
 
