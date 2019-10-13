@@ -16,24 +16,16 @@ public class PropertyTest : MonoBehaviour {
 
     void Awake() {
 
-        var divGate = new DivisionGate();
-        InputSocket<double> inputSocket = new InputSocket<double>(0);
-        inputSocket.readOnlyValueProperty.Subscribe(v => {
-            this.addText.text = divGate.dividendSocket.Get().ToString() + " % " + divGate.divisorSocket.Get() 
-                            + "\n= " + v.ToString();
-            });
-        divGate.remainderSocket.inputSockets.Add(inputSocket);
+        var gate = new ThresholdGate();
+        gate.maxSocket.Set(0);
+        gate.minSocket.Set(-1.0);
+        Observable.EveryUpdate().Subscribe(_ => {
+            gate.valueSocket.Set(this.boxTranceform.position.y);
+        });
 
-        boxTranceform
-            .ObserveEveryValueChanged(transform => transform.position)
-            .Subscribe(position => {
-                this.positionText.text = position.ToString();
-                divGate.dividendSocket.Set(position.x);
-                divGate.divisorSocket.Set(position.y);
-            });
-
-        var range = new Range(100, 0);
-        Debug.Log("[" + range.min + ", " + range.max + "]");
+        InputSocket<bool> inputSocket = new InputSocket<bool>(true);
+        gate.resultProperty.inputSockets.Add(inputSocket);
+        inputSocket.Subscribe(v => this.addText.text = v.ToString());
 
     }
 
