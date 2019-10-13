@@ -17,8 +17,11 @@ public class PropertyTest : MonoBehaviour {
 
         var divGate = new DivisionGate();
         InputSocket<double> inputSocket = new InputSocket<double>(0);
-        inputSocket.readOnlyValueProperty.Subscribe(v => this.addText.text = v.ToString());
-        divGate.resultSocket.inputSockets.Add(inputSocket);
+        inputSocket.readOnlyValueProperty.Subscribe(v => {
+            this.addText.text = divGate.dividendSocket.Get().ToString() + " % " + divGate.divisorSocket.Get() 
+                            + "\n= " + v.ToString();
+            });
+        divGate.remainderSocket.inputSockets.Add(inputSocket);
 
         boxTranceform
             .ObserveEveryValueChanged(transform => transform.position)
@@ -31,14 +34,12 @@ public class PropertyTest : MonoBehaviour {
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         
     }
 }
