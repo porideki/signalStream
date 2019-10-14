@@ -18,8 +18,9 @@ public class PropertyTest : MonoBehaviour {
 
         var gate = new ThresholdGate();
         gate.maxSocket.Set(0);
-        gate.minSocket.Set(-1.0);
+        gate.minSocket.Set(-2.5);
         Observable.EveryUpdate().Subscribe(_ => {
+            this.positionText.text = gate.minSocket.Get() + " < " + this.boxTranceform.position.y.ToString() + " < " + gate.maxSocket.Get();
             gate.valueSocket.Set(this.boxTranceform.position.y);
         });
 

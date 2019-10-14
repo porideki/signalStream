@@ -24,16 +24,11 @@ namespace Assets.Scripts.porideki.parts {
         public T Get() {
             return this.valueProperty.Value;
         }
-
-
+        
         public void Set(T value) {
             this.valueProperty.Value = value;
         }
 
-        /// <summary>
-        /// ChangeListener的扱い
-        /// </summary>
-        /// <param name="action"></param>
         public void Subscribe(Action<T> action) {
             this.valueProperty.Subscribe(action);
         }

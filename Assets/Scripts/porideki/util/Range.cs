@@ -26,14 +26,16 @@ namespace Assets.Scripts.porideki.util {
             this.minProperty = new ReactiveProperty<double>(min);
             this.maxProperty = new ReactiveProperty<double>(max);
 
-            this.minProperty.Subscribe(_ => this.Compare());
-            this.maxProperty.Subscribe(_ => this.Compare());
+            //値が変化した時大小比較
+            this.minProperty.DistinctUntilChanged().Subscribe(_ => this.Compare());
+            this.maxProperty.DistinctUntilChanged().Subscribe(_ => this.Compare());
 
         }
 
         //大小比較
         private void Compare() {
 
+            //大小逆の時入れ替える
             if(this.maxProperty.Value < this.minProperty.Value) {
                 double tmp = this.maxProperty.Value;
                 this.maxProperty.Value = this.minProperty.Value;
