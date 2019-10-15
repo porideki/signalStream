@@ -14,9 +14,9 @@ namespace Assets.Scripts.porideki.gates {
         public OutputSocket<double> resultSocket;
 
         public SumGate() {
-            this.addendSocket0 = new InputSocket<double>();
-            this.addendSocket1 = new InputSocket<double>();
-            this.resultSocket = new OutputSocket<double>();
+            this.addendSocket0 = new InputSocket<double>(0);
+            this.addendSocket1 = new InputSocket<double>(0);
+            this.resultSocket = new OutputSocket<double>(0);
         }
 
         protected override void Process() {

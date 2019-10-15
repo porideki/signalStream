@@ -14,9 +14,9 @@ namespace Assets.Scripts.porideki.gates {
         public OutputSocket<double> resultSocket;
 
         public MultiplicationGate() {
-            this.multiplierSocket0 = new InputSocket<double>();
-            this.multiplierSocket1 = new InputSocket<double>();
-            this.resultSocket = new OutputSocket<double>();
+            this.multiplierSocket0 = new InputSocket<double>(0);
+            this.multiplierSocket1 = new InputSocket<double>(0);
+            this.resultSocket = new OutputSocket<double>(0);
         }
 
         protected override void Process() {

@@ -17,11 +17,11 @@ namespace Assets.Scripts.porideki.gates {
 
         public DivisionGate() {
 
-            this.dividendSocket = new InputSocket<double>();
-            this.divisorSocket = new InputSocket<double>();
-            this.defaultSocket = new InputSocket<double>();
-            this.resultSocket = new OutputSocket<double>();
-            this.remainderSocket = new OutputSocket<double>();
+            this.dividendSocket = new InputSocket<double>(0);
+            this.divisorSocket = new InputSocket<double>(0);
+            this.defaultSocket = new InputSocket<double>(0);
+            this.resultSocket = new OutputSocket<double>(0);
+            this.remainderSocket = new OutputSocket<double>(0);
 
         }
 

@@ -18,8 +18,8 @@ namespace Assets.Scripts.porideki.gates {
         public DifferenceGate() {
 
             //インスタンス
-            this.minuendSocket = new InputSocket<double>();
-            this.subtrahendSocket = new InputSocket<double>();
+            this.minuendSocket = new InputSocket<double>(0);
+            this.subtrahendSocket = new InputSocket<double>(0);
 
             this.mulGate = new MultiplicationGate();
             this.addGate = new SumGate();

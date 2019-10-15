@@ -15,10 +15,10 @@ namespace Assets.Scripts.porideki.gates {
 
         public ExponentialGate() {
 
-            this.baseSocket = new InputSocket<double>();
-            this.exponentSocket = new InputSocket<double>();
-            this.defaultSocket = new InputSocket<double>();
-            this.resultSocket = new OutputSocket<double>();
+            this.baseSocket = new InputSocket<double>(0);
+            this.exponentSocket = new InputSocket<double>(0);
+            this.defaultSocket = new InputSocket<double>(1);
+            this.resultSocket = new OutputSocket<double>(0);
 
         }
 
