@@ -11,6 +11,9 @@ namespace Assets.Scripts.porideki.parts {
 
         //値バッファ
         private ReactiveProperty<T> valueBuffer;
+        public IReadOnlyReactiveProperty<T> readOnlyValueBuffer {
+            get { return this.valueBuffer; }
+        }
 
         //送信先
         public List<InputSocket<T>> inputSockets;
