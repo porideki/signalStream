@@ -29,6 +29,9 @@ namespace Assets.Scripts.porideki.parts {
 
         }
 
+        //既定値で初期化
+        public OutputSocket() : this(default(T)) { }
+
         private void Flush(T value) {
             foreach (InputSocket<T> inputSocket in this.inputSockets) {
                 inputSocket.Set(value);
