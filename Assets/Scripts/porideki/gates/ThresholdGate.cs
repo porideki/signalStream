@@ -20,9 +20,9 @@ namespace Assets.Scripts.porideki.gates {
         public ThresholdGate(){
 
             //インスタンス
-            this.valueSocket = new InputSocket<double>(0);
-            this.minSocket = new InputSocket<double>(0);
-            this.maxSocket = new InputSocket<double>(10);
+            this.valueSocket = new InputSocket<double>();
+            this.minSocket = new InputSocket<double>();
+            this.maxSocket = new InputSocket<double>();
             this.resultProperty = new OutputSocket<bool>(true);
 
             this.range = new Range(this.minSocket.Get(), this.maxSocket.Get());
