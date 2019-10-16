@@ -21,6 +21,9 @@ namespace Assets.Scripts.porideki.parts {
 
         }
 
+        //既定値で初期化
+        public InputSocket() : this(default(T)) { }
+
         public T Get() {
             return this.valueProperty.Value;
         }
