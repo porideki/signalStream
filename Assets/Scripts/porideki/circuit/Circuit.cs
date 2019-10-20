@@ -6,5 +6,14 @@ using UniRx;
 using Assets.Scripts.porideki.parts;
 
 public class Circuit {
-    
+
+    internal ReactiveCollection<Gate> Gates;
+
+    public Circuit() {
+
+        //インスタンス
+        this.Gates = new ReactiveCollection<Gate>();
+
+    }
+
 }

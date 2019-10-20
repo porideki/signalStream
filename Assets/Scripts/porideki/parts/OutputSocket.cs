@@ -7,7 +7,7 @@ using UniRx;
 
 namespace Assets.Scripts.porideki.parts {
 
-    public class OutputSocket<T> {
+    internal class OutputSocket<T> {
 
         //値バッファ
         private ReactiveProperty<T> valueBuffer;
@@ -43,6 +43,10 @@ namespace Assets.Scripts.porideki.parts {
 
         public void Set(T value) {
             this.valueBuffer.Value = value;
+        }
+
+        public static explicit operator NormalizedOutputSocket(OutputSocket<T> socket) {
+            return new NormalizedOutputSocket(socket);
         }
 
     }

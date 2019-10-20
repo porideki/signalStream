@@ -36,6 +36,11 @@ namespace Assets.Scripts.porideki.parts {
             this.valueProperty.Subscribe(action);
         }
 
+        //ジェネリックなし情報に変換
+        public static explicit operator NormalizedInputSocket(InputSocket<T> socket) {
+            return new NormalizedInputSocket(socket);
+        }
+
     }
 
 }
