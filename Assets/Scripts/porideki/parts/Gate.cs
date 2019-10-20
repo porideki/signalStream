@@ -17,9 +17,9 @@ namespace Assets.Scripts.porideki.parts {
         }
         protected virtual void Process() { }
 
-        internal abstract NormalizedInputSocket[] GetInputSockets();
+        internal abstract object[] GetInputSockets();
 
-        internal abstract NormalizedOutputSocket[] GetOutputSockets();
+        internal abstract object[] GetOutputSockets();
 
 
     }

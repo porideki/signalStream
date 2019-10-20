@@ -26,12 +26,12 @@ namespace Assets.Scripts.porideki.gates {
 
         }
 
-        internal override NormalizedInputSocket[] GetInputSockets() {
-            return new NormalizedInputSocket[] { (NormalizedInputSocket)this.multiplierSocket0, (NormalizedInputSocket)this.multiplierSocket1 };
+        internal override object[] GetInputSockets() {
+            return new object[] { this.multiplierSocket0, this.multiplierSocket1 };
         }
 
-        internal override NormalizedOutputSocket[] GetOutputSockets() {
-            return new NormalizedOutputSocket[] { (NormalizedOutputSocket)this.resultSocket };
+        internal override object[] GetOutputSockets() {
+            return new object[] { this.resultSocket };
         }
 
     }
