@@ -8,7 +8,7 @@ using UniRx;
 using Assets.Scripts.porideki.parts;
 
 namespace Assets.Scripts.porideki.parts {
-    class Gate {
+    abstract class Gate {
 
         public Gate() {
 
@@ -17,13 +17,9 @@ namespace Assets.Scripts.porideki.parts {
         }
         protected virtual void Process() { }
 
-        internal virtual NormalizedInputSocket[] GetInputSockets() {
-            return new NormalizedInputSocket[0];
-        }
+        internal abstract NormalizedInputSocket[] GetInputSockets();
 
-        internal virtual NormalizedOutputSocket[] GetOutputSockets() {
-            return new NormalizedOutputSocket[0];
-        }
+        internal abstract NormalizedOutputSocket[] GetOutputSockets();
 
 
     }

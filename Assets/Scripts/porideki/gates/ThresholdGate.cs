@@ -13,7 +13,7 @@ namespace Assets.Scripts.porideki.gates {
         public InputSocket<double> valueSocket;
         public InputSocket<double> minSocket;
         public InputSocket<double> maxSocket;
-        public OutputSocket<bool> resultProperty;
+        public OutputSocket<bool> resultSocket;
 
         private Range range;
 
@@ -23,7 +23,7 @@ namespace Assets.Scripts.porideki.gates {
             this.valueSocket = new InputSocket<double>();
             this.minSocket = new InputSocket<double>();
             this.maxSocket = new InputSocket<double>();
-            this.resultProperty = new OutputSocket<bool>(true);
+            this.resultSocket = new OutputSocket<bool>(true);
 
             this.range = new Range(this.minSocket.Get(), this.maxSocket.Get());
 
@@ -36,10 +36,18 @@ namespace Assets.Scripts.porideki.gates {
         protected override void Process() {
             base.Process();
 
-            this.resultProperty.Set(
+            this.resultSocket.Set(
                     this.range.min <= this.valueSocket.Get() 
                 &&  this.valueSocket.Get() <= this.range.max
                     );
+        }
+
+        internal override NormalizedInputSocket[] GetInputSockets() {
+            return new NormalizedInputSocket[] { (NormalizedInputSocket)this.valueSocket, (NormalizedInputSocket)this.minSocket, (NormalizedInputSocket)this.maxSocket };
+        }
+
+        internal override NormalizedOutputSocket[] GetOutputSockets() {
+            return new NormalizedOutputSocket[] { (NormalizedOutputSocket)this.resultSocket };
         }
 
     }

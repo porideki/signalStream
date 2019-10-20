@@ -25,7 +25,7 @@ public class PropertyTest : MonoBehaviour {
         });
 
         InputSocket<bool> inputSocket = new InputSocket<bool>(true);
-        gate.resultProperty.inputSockets.Add(inputSocket);
+        gate.resultSocket.inputSockets.Add(inputSocket);
         inputSocket.Subscribe(v => this.addText.text = v.ToString());
 
     }
