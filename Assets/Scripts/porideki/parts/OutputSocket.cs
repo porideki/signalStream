@@ -45,6 +45,10 @@ namespace Assets.Scripts.porideki.parts {
             this.valueBuffer.Value = value;
         }
 
+        public T Get() {
+            return this.valueBuffer.Value;
+        }
+
         public static explicit operator NormalizedOutputSocket(OutputSocket<T> socket) {
             return new NormalizedOutputSocket(socket);
         }
