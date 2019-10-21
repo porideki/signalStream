@@ -22,7 +22,7 @@ namespace Assets.Scripts.porideki.gates {
             this.inputSocket = new InputSocket<T>();
             this.outputSocket = new OutputSocket<R>();
 
-            this.function = function;
+            this.SetFunction(function);
 
         }
 
