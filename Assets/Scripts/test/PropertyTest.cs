@@ -23,29 +23,28 @@ public class PropertyTest : MonoBehaviour {
         gate.maxSocket.Set(0);
         gate.minSocket.Set(-2.5);
 
-        //ソケット作成
-        var outputSocket = new OutputSocket<double>();
-        var inputSocket = gate.valueSocket;
-
-        //プロセス　インスタンス部分作成
-        Observable.EveryUpdate().Subscribe(_ => {
-            this.positionText.text = gate.minSocket.Get() + " < " + this.boxTranceform.position.y.ToString() + " < " + gate.maxSocket.Get();
-            this.addText.text = gate.resultSocket.Get().ToString();
-            //gate.valueSocket.Set(this.boxTranceform.position.y);
-            outputSocket.Set(this.boxTranceform.position.y);    //y座標をソケットに設定
+        //入力ゲート
+        var censorGate = new FunctionGate<double, double>((value) => {
+            return this.boxTranceform.position.y;
         });
 
-        //コネクション
-        CircuitProcessor.MakeConnection(inputSocket, outputSocket);
+        //出力ゲート
+        //double
+        var motorGate0 = new FunctionGate<double, double>((value) => {
+            this.positionText.text = "-2.5 < " + value + " < 0";
+            return 0;
+        });
 
-        Observable.Timer(TimeSpan.FromSeconds(5)).Subscribe(_ => {
-            Debug.Log("Remove connection");
-            CircuitProcessor.RemoveConnection(inputSocket);
+        //bool
+        var motorGate1 = new FunctionGate<bool, bool>((value) => {
+            this.addText.text = value.ToString();
+            return true;
         });
-        Observable.Timer(TimeSpan.FromSeconds(10)).Subscribe(_ => {
-            Debug.Log("Make connection");
-            CircuitProcessor.MakeConnection(inputSocket, outputSocket);
-        });
+
+        //コネクション生成
+        CircuitProcessor.MakeConnection(gate.valueSocket, censorGate.outputSocket);
+        CircuitProcessor.MakeConnection(motorGate1.inputSocket, gate.resultSocket);
+        CircuitProcessor.MakeConnection(motorGate0.inputSocket, censorGate.outputSocket);
         
     }
 

@@ -28,7 +28,6 @@ namespace Assets.Scripts.porideki.circuit {
                 return list.ToArray();
             }
         }
-
         internal Connection[] connections {
             get {
                 var list = new List<Connection>();
