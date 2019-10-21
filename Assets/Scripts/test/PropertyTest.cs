@@ -24,7 +24,7 @@ public class PropertyTest : MonoBehaviour {
         gate.minSocket.Set(-2.5);
 
         //入力ゲート
-        var censorGate = new FunctionGate<double, double>((value) => {
+        var censorGate = new FunctionSensor<double>(() => {
             return this.boxTranceform.position.y;
         });
 
