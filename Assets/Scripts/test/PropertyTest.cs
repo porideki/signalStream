@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using Assets.Scripts.porideki.circuit;
 using Assets.Scripts.porideki.gates;
 using Assets.Scripts.porideki.parts;
 using Assets.Scripts.porideki.util;
