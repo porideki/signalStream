@@ -30,15 +30,13 @@ public class PropertyTest : MonoBehaviour {
 
         //出力ゲート
         //double
-        var motorGate0 = new FunctionGate<double, double>((value) => {
+        var motorGate0 = new ActionMotor<double>((value) => {
             this.positionText.text = "-2.5 < " + value + " < 0";
-            return 0;
         });
 
         //bool
-        var motorGate1 = new FunctionGate<bool, bool>((value) => {
+        var motorGate1 = new ActionMotor<bool>((value) => {
             this.addText.text = value.ToString();
-            return true;
         });
 
         //コネクション生成
