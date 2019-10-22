@@ -229,6 +229,18 @@ namespace Assets.Scripts.porideki.circuit {
 
         #endregion
 
+        internal void Start() {
+            foreach(Gate gate in this.circuit.gates) {
+                gate.Start();
+            }
+        }
+
+        internal void Stop() {
+            foreach (Gate gate in this.circuit.gates) {
+                gate.Stop();
+            }
+        }
+
     }
 
 }
