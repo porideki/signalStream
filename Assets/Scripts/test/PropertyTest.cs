@@ -17,42 +17,32 @@ public class PropertyTest : MonoBehaviour {
 
     void Awake() {
 
-        //二値化ゲート
-        var gate = new ThresholdGate();
-        //範囲指定
-        gate.maxSocket.Set(0);
-        gate.minSocket.Set(-2.5);
-
-        //入力ゲート
+        //入力センサ
         var censorGate = new FunctionSensor<double>(() => {
             return this.boxTranceform.position.y;
         });
 
-        //出力ゲート
-        //double
+        //中間ゲート
+        var gate = new ThresholdGate(-2.5, 0);  //二値化
+        var unfoGate = new UnfoldGate();    //展開
+
+        //出力モータ
+        //yスループット
         var motorGate0 = new ActionMotor<double>((value) => {
             this.positionText.text = "-2.5 < " + value + " < 0";
         });
 
-        //bool
-        var motorGate1 = new ActionMotor<bool>((value) => {
+        //範囲内表示
+        var motorGate1 = new ActionMotor<double>((value) => {
             this.addText.text = value.ToString();
         });
 
         //コネクション生成
         CircuitProcessor.MakeConnection(gate.valueSocket, censorGate.outputSocket);
-        CircuitProcessor.MakeConnection(motorGate1.inputSocket, gate.resultSocket);
+        CircuitProcessor.MakeConnection(unfoGate.valueSocket, gate.resultSocket);
+        CircuitProcessor.MakeConnection(motorGate1.inputSocket, unfoGate.resultSocket);
         CircuitProcessor.MakeConnection(motorGate0.inputSocket, censorGate.outputSocket);
         
     }
 
-    // Start is called before the first frame update
-    void Start() {
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
-    }
 }
