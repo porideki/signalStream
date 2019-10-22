@@ -17,6 +17,9 @@ public class PropertyTest : MonoBehaviour {
 
     void Awake() {
 
+        //回路
+        var circuit = new Circuit();
+
         //入力センサ
         var censorGate = new FunctionSensor<double>(() => {
             return this.boxTranceform.position.y;
@@ -37,12 +40,30 @@ public class PropertyTest : MonoBehaviour {
             this.addText.text = value.ToString();
         });
 
+        //回路登録
+        circuit.gates.Add(censorGate);
+        circuit.gates.Add(gate);
+        circuit.gates.Add(unfoGate);
+        circuit.gates.Add(motorGate0);
+        circuit.gates.Add(motorGate1);
+
         //コネクション生成
-        CircuitProcessor.MakeConnection(gate.valueSocket, censorGate.outputSocket);
-        CircuitProcessor.MakeConnection(unfoGate.valueSocket, gate.resultSocket);
-        CircuitProcessor.MakeConnection(motorGate1.inputSocket, unfoGate.resultSocket);
-        CircuitProcessor.MakeConnection(motorGate0.inputSocket, censorGate.outputSocket);
-        
+        Circuit.MakeConnection(gate.valueSocket, censorGate.outputSocket);
+        Circuit.MakeConnection(unfoGate.valueSocket, gate.resultSocket);
+        Circuit.MakeConnection(motorGate1.inputSocket, unfoGate.resultSocket);
+        Circuit.MakeConnection(motorGate0.inputSocket, censorGate.outputSocket);
+
+        Observable.EveryUpdate().Where(_ => Input.GetKeyDown(KeyCode.E))
+            .Subscribe(_ => {
+                if (censorGate.IsRun) {
+                    Debug.Log("Stop");
+                    circuit.Stop();
+                } else {
+                    Debug.Log("Start");
+                    circuit.Start();
+                }
+            });
+
     }
 
 }
