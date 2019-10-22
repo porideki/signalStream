@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UniRx;
 
+using Assets.Scripts.porideki.parts;
+
 namespace Assets.Scripts.porideki.parts {
-    class Gate {
+    abstract class Gate {
 
         public Gate() {
 
@@ -14,6 +16,10 @@ namespace Assets.Scripts.porideki.parts {
 
         }
         protected virtual void Process() { }
+
+        internal abstract object[] GetInputSockets();
+
+        internal abstract object[] GetOutputSockets();
 
 
     }

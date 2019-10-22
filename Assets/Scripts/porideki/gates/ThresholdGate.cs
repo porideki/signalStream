@@ -13,17 +13,19 @@ namespace Assets.Scripts.porideki.gates {
         public InputSocket<double> valueSocket;
         public InputSocket<double> minSocket;
         public InputSocket<double> maxSocket;
-        public OutputSocket<bool> resultProperty;
+        public OutputSocket<bool> resultSocket;
 
         private Range range;
 
-        public ThresholdGate(){
+        public ThresholdGate() : this(0, 1) { }
+
+        public ThresholdGate(double minValue, double maxValue){
 
             //インスタンス
             this.valueSocket = new InputSocket<double>();
-            this.minSocket = new InputSocket<double>();
-            this.maxSocket = new InputSocket<double>();
-            this.resultProperty = new OutputSocket<bool>(true);
+            this.minSocket = new InputSocket<double>(minValue);
+            this.maxSocket = new InputSocket<double>(maxValue);
+            this.resultSocket = new OutputSocket<bool>();
 
             this.range = new Range(this.minSocket.Get(), this.maxSocket.Get());
 
@@ -36,10 +38,18 @@ namespace Assets.Scripts.porideki.gates {
         protected override void Process() {
             base.Process();
 
-            this.resultProperty.Set(
+            this.resultSocket.Set(
                     this.range.min <= this.valueSocket.Get() 
                 &&  this.valueSocket.Get() <= this.range.max
                     );
+        }
+
+        internal override object[] GetInputSockets() {
+            return new object[] { this.valueSocket, this.minSocket, this.maxSocket };
+        }
+
+        internal override object[] GetOutputSockets() {
+            return new object[] { this.resultSocket };
         }
 
     }
