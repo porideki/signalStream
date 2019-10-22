@@ -19,7 +19,6 @@ public class PropertyTest : MonoBehaviour {
 
         //回路
         var circuit = new Circuit();
-        var circuitProcessor = new CircuitProcessor(circuit);
 
         //入力センサ
         var censorGate = new FunctionSensor<double>(() => {
@@ -42,28 +41,27 @@ public class PropertyTest : MonoBehaviour {
         });
 
         //回路登録
-        circuitProcessor.AddGate(censorGate);
-        circuitProcessor.AddGate(gate);
-        circuitProcessor.AddGate(unfoGate);
-        circuitProcessor.AddGate(motorGate0);
-        circuitProcessor.AddGate(motorGate1);
+        circuit.gates.Add(censorGate);
+        circuit.gates.Add(gate);
+        circuit.gates.Add(unfoGate);
+        circuit.gates.Add(motorGate0);
+        circuit.gates.Add(motorGate1);
 
         //コネクション生成
-        CircuitProcessor.MakeConnection(gate.valueSocket, censorGate.outputSocket);
-        CircuitProcessor.MakeConnection(unfoGate.valueSocket, gate.resultSocket);
-        CircuitProcessor.MakeConnection(motorGate1.inputSocket, unfoGate.resultSocket);
-        CircuitProcessor.MakeConnection(motorGate0.inputSocket, censorGate.outputSocket);
+        Circuit.MakeConnection(gate.valueSocket, censorGate.outputSocket);
+        Circuit.MakeConnection(unfoGate.valueSocket, gate.resultSocket);
+        Circuit.MakeConnection(motorGate1.inputSocket, unfoGate.resultSocket);
+        Circuit.MakeConnection(motorGate0.inputSocket, censorGate.outputSocket);
 
         Observable.EveryUpdate().Where(_ => Input.GetKeyDown(KeyCode.E))
             .Subscribe(_ => {
                 if (censorGate.IsRun) {
                     Debug.Log("Stop");
-                    circuitProcessor.Stop();
+                    circuit.Stop();
                 } else {
                     Debug.Log("Start");
-                    circuitProcessor.Start();
+                    circuit.Start();
                 }
-                
             });
 
     }
