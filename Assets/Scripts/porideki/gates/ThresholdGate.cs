@@ -17,13 +17,15 @@ namespace Assets.Scripts.porideki.gates {
 
         private Range range;
 
-        public ThresholdGate(){
+        public ThresholdGate() : this(0, 1) { }
+
+        public ThresholdGate(double minValue, double maxValue){
 
             //インスタンス
             this.valueSocket = new InputSocket<double>();
-            this.minSocket = new InputSocket<double>();
-            this.maxSocket = new InputSocket<double>();
-            this.resultSocket = new OutputSocket<bool>(true);
+            this.minSocket = new InputSocket<double>(minValue);
+            this.maxSocket = new InputSocket<double>(maxValue);
+            this.resultSocket = new OutputSocket<bool>();
 
             this.range = new Range(this.minSocket.Get(), this.maxSocket.Get());
 
