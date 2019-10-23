@@ -56,19 +56,11 @@ namespace Assets.Scripts.porideki.circuit {
             switch (inputSocketObj) {
                 //double型ソケット
                 case InputSocket<double> inputSocket:
-                    if (outputSocketObj is OutputSocket<double>) {
-                        var outputSocket = outputSocketObj as OutputSocket<double>;
-                        return outputSocket.inputSockets.Contains(inputSocket);
-                    }
-                    break;
+                    return Circuit.HasConnection<double>(inputSocket, outputSocketObj);
 
                 //bool型ソケット
                 case InputSocket<bool> inputSocket:
-                    if (outputSocketObj is OutputSocket<bool>) {
-                        var outputSocket = outputSocketObj as OutputSocket<bool>;
-                        return outputSocket.inputSockets.Contains(inputSocket);
-                    }
-                    break;
+                    return Circuit.HasConnection<bool>(inputSocket, outputSocketObj);
 
                 default:
                     Debug.LogError("ソケットの型に対する処理が未定義、又はソケット型ではありません");
@@ -77,6 +69,14 @@ namespace Assets.Scripts.porideki.circuit {
 
             return false;
 
+        }
+
+        private static bool HasConnection<T>(InputSocket<T> inputSocket, object outputSocketObj) {
+            if(outputSocketObj is OutputSocket<T>) {
+                var outputSocket = outputSocketObj as OutputSocket<T>;
+                return outputSocket.inputSockets.Contains(inputSocket);
+            }
+            return false;
         }
 
         //コネクション作成
@@ -92,33 +92,32 @@ namespace Assets.Scripts.porideki.circuit {
             switch (inputSocketObj) {
                 //double型ソケット
                 case InputSocket<double> inputSocket:
-                    if (outputSocketObj is OutputSocket<double>) {
-                        var outputSocket = outputSocketObj as OutputSocket<double>;
-                        outputSocket.inputSockets.Add(inputSocket); //追加
-                        inputSocket.parentSocket.Value = outputSocket;
-                        return true;
-                    }
-                    break;
+                    return Circuit.MakeConnection<double>(inputSocket, outputSocketObj);
 
                 //bool型ソケット
                 case InputSocket<bool> inputSocket:
-                    if (outputSocketObj is OutputSocket<bool>) {
-                        var outputSocket = outputSocketObj as OutputSocket<bool>;
-                        outputSocket.inputSockets.Add(inputSocket); //追加
-                        inputSocket.parentSocket.Value = outputSocket;
-                        return true;
-                    }
-                    break;
+                    return Circuit.MakeConnection<bool>(inputSocket, outputSocketObj);
 
                 default:
                     System.Type[] inSockType = inputSocketObj.GetType().GetGenericArguments();
-                    System.Type[] ouSockType = outputSocketObj.GetType().GetGenericArguments();
+                    System.Type[] outSockType = outputSocketObj.GetType().GetGenericArguments();
                     Debug.LogError("ソケットの型に対する処理が未定義、又はソケット型ではありません: " + inSockType + " -> " + outputSocketObj);
                     break;
             }
 
             return false;
 
+        }
+
+        //親子設定
+        private static bool MakeConnection<T>(InputSocket<T> inputSocket, object outputSocketObj) {
+            if(outputSocketObj is OutputSocket<T>) {
+                var outputSocket = outputSocketObj as OutputSocket<T>;
+                outputSocket.inputSockets.Add(inputSocket); //追加
+                inputSocket.parentSocket.Value = outputSocket;
+                return true;
+            }
+            return false;
         }
 
         //
@@ -130,23 +129,11 @@ namespace Assets.Scripts.porideki.circuit {
                 switch (inputSocketObj) {
                     //double型
                     case InputSocket<double> inputSocket:
-                        if (outputSocketObj is OutputSocket<double>) {
-                            var outputSocket = outputSocketObj as OutputSocket<double>;
-                            outputSocket.inputSockets.Remove(inputSocket);  //親から削除
-                            inputSocket.parentSocket.Value = null;  //子から削除
-                            return true;
-                        }
-                        break;
+                        return Circuit.RemoveConnection<double>(inputSocket, outputSocketObj);
 
                     //bool型
                     case InputSocket<bool> inputSocket:
-                        if (outputSocketObj is OutputSocket<bool>) {
-                            var outputSocket = outputSocketObj as OutputSocket<bool>;
-                            outputSocket.inputSockets.Remove(inputSocket);  //親から削除
-                            inputSocket.parentSocket.Value = null;  //子から削除 
-                            return true;
-                        }
-                        break;
+                        return Circuit.RemoveConnection<bool>(inputSocket, outputSocketObj);
 
                     default:
                         Debug.LogError("ソケットの型に対する処理が未定義、又はソケット型ではありません");
@@ -161,23 +148,27 @@ namespace Assets.Scripts.porideki.circuit {
 
         }
 
+        private static bool RemoveConnection<T>(InputSocket<T> inputSocket, object outputSocketObj) {
+            if (outputSocketObj is OutputSocket<T>) {
+                var outputSocket = outputSocketObj as OutputSocket<T>;
+                outputSocket.inputSockets.Remove(inputSocket);  //親から削除
+                inputSocket.parentSocket.Value = null;  //子から削除 
+                return true;
+            }
+            return false;
+        }
+
         public static bool RemoveConnection(object socketObj) { //IOソケット両対応
 
             //InputSocket
             switch (socketObj) {
                 //double型
                 case InputSocket<double> inputSocket:
-                    if (inputSocket.parentSocket.HasValue) {    //親取得
-                        var outputSocket = inputSocket.parentSocket.Value;
-                        return Circuit.RemoveConnection(inputSocket, outputSocket); //削除
-                    } else return false;
+                    return Circuit.RemoveConnection<double>(inputSocket);
 
                 //bool型
                 case InputSocket<bool> inputSocket:
-                    if (inputSocket.parentSocket.HasValue) {    //親取得
-                        var outputSocket = inputSocket.parentSocket.Value;
-                        return Circuit.RemoveConnection(inputSocket, outputSocket); //削除
-                    } else return false;
+                    return Circuit.RemoveConnection<bool>(inputSocket);
 
                 default:
                     break;
@@ -186,29 +177,12 @@ namespace Assets.Scripts.porideki.circuit {
             //OutputSocket
             switch (socketObj) {
                 //double型
-                case OutputSocket<double> outputSocket: {
-                        //foreach内でコレクションを編集しない
-                        var InputSocketsBuffer = new List<InputSocket<double>>();
-                        foreach (InputSocket<double> inputSocket in outputSocket.inputSockets) {
-                            InputSocketsBuffer.Add(inputSocket);    //送信先INソケット
-                        }
-                        foreach (InputSocket<double> inputSocket in InputSocketsBuffer) {
-                            Circuit.RemoveConnection(inputSocket, outputSocket);
-                        }
-                        return true;
-                    }
+                case OutputSocket<double> outputSocket:
+                    return Circuit.RemoveConnection<double>(outputSocket);
 
                 //bool型
-                case OutputSocket<bool> outputSocket: {
-                        var InputSocketsBuffer = new List<InputSocket<bool>>();
-                        foreach (InputSocket<bool> inputSocket in outputSocket.inputSockets) {
-                            InputSocketsBuffer.Add(inputSocket);    //送信先INソケット
-                        }
-                        foreach (InputSocket<bool> inputSocket in InputSocketsBuffer) {
-                            Circuit.RemoveConnection(inputSocket, outputSocket);
-                        }
-                        return true;
-                    }
+                case OutputSocket<bool> outputSocket:
+                    return Circuit.RemoveConnection<bool>(outputSocket);
 
                 default:
                     break;
@@ -216,6 +190,27 @@ namespace Assets.Scripts.porideki.circuit {
 
             return false;
 
+        }
+
+        private static bool RemoveConnection<T>(InputSocket<T> inputSocket) {
+            if (inputSocket.parentSocket.HasValue) {    //親取得
+                var outputSocket = inputSocket.parentSocket.Value;
+                return Circuit.RemoveConnection(inputSocket, outputSocket); //削除
+            } else {
+                return false;
+            }
+        }
+
+        private static bool RemoveConnection<T>(OutputSocket<T> outputSocket) {
+            //foreach内でコレクションを編集しない
+            var InputSocketsBuffer = new List<InputSocket<T>>();
+            foreach (InputSocket<T> inputSocket in outputSocket.inputSockets) {
+                InputSocketsBuffer.Add(inputSocket);    //送信先INソケット
+            }
+            foreach (InputSocket<T> inputSocket in InputSocketsBuffer) {
+                Circuit.RemoveConnection(inputSocket, outputSocket);
+            }
+            return true;
         }
 
         #endregion
