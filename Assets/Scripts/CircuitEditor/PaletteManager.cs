@@ -5,6 +5,7 @@ using UniRx;
 
 public class PaletteManager : MonoBehaviour {
 
+    //ハンドマネージャ
     private HandManager handManager;
 
     //選択中パレットエレメント
@@ -13,9 +14,9 @@ public class PaletteManager : MonoBehaviour {
     public void Awake() {
 
         //インスタンス化
-        this.selectedElementProperty = new ReactiveProperty<PaletteElement>();
+        this.selectedElementProperty = new ReactiveProperty<PaletteElement>();  //選択中エレメント
 
-        //オブジェクト取得
+        //ハンドマネージャ取得
         this.handManager = GameObject.Find("EditorManager").GetComponent<HandManager>();
         if (this.handManager == null) Debug.LogError("HandManager is not found.");
 
@@ -23,8 +24,9 @@ public class PaletteManager : MonoBehaviour {
         this.selectedElementProperty.Where(element => element != null) //nullの時は無視(主に購読登録時)
                                     .Subscribe(element => {
                                         Debug.Log("selectedElement is changed.");
+                                        //手持ちのプレハブを更新
                                         this.handManager.takingPaletteProperty.Value = element.prefab;
-                                    }); //手持ちのプレハブ変更
+                                    });
 
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UniRx;
+using Assets.Scripts.porideki.circuit;
 
 public class HandManager : MonoBehaviour {
 
@@ -13,6 +14,10 @@ public class HandManager : MonoBehaviour {
     [HideInInspector]public ReactiveProperty<GameObject> takingPaletteProperty; //パレットで選択中のGateオブジェクト
     [HideInInspector] public ReactiveProperty<GameObject> takingSocketProperty; //選択中のソケット
 
+    //回路オブジェクト
+    private Circuit circuit;
+
+    //
     private GameObject takingLineObject;
 
     private GameObject pointerTracer;
@@ -27,7 +32,11 @@ public class HandManager : MonoBehaviour {
         this.takingSocketProperty = new ReactiveProperty<GameObject>();
         this.pointerTracer = new GameObject("PointerTracer");
 
+        //回路オブジェクト取得
+        this.circuit = GameObject.Find("CircuitStrage").GetComponent<CircuitStrage>().circuit;
+
         //リスナ登録
+        //クリック時のログ表示
         this.takingPaletteProperty.Where(paleteObject => paleteObject != null)
                                 .Subscribe(paletteObject => Debug.Log(paletteObject.name));
 
@@ -60,12 +69,18 @@ public class HandManager : MonoBehaviour {
                     Vector3 mousePos = Input.mousePosition;
                     mousePos.z = 10.0f;
                     instantiatedObject.transform.position = this.mouseWorldPos;
+                    //回路に追加
+                    var gate = instantiatedObject.GetComponent<GateUI>().Generate();
+                    this.circuit.AddGate(gate);
                 }
                 break;
 
             case "Gate":
                 if (button == PointerEventData.InputButton.Right) {
                     Debug.Log("Destroy!");
+                    //Gateを回路から削除
+                    this.circuit.RemoveGate(pointerEventData.pointerEnter.gameObject.GetComponent<GateUI>().allocatedGate);
+                    //UIオブジェクトを削除
                     GameObject.Destroy(pointerEventData.pointerEnter.gameObject);
                 }
                 break;

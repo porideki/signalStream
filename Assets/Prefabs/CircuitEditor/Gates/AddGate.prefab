@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5542163039034921985}
   - component: {fileID: 5542163039034921986}
   - component: {fileID: 5542163039034921987}
-  - component: {fileID: 708804828677911975}
   m_Layer: 8
   m_Name: AddendSocket1
   m_TagString: InputSocket
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5542163039034921984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.816, y: -0.614, z: -0.1}
+  m_LocalPosition: {x: -0.816, y: -0.614, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5542163039440582904}
@@ -71,18 +70,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24d849b7198b564d90ff7f5586afc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &708804828677911975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542163039034921984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30f84eb6d07113b4893fa0853e21650c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5542163039440582910
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,6 +82,8 @@ GameObject:
   - component: {fileID: 5542163039440582911}
   - component: {fileID: 5542163039440582905}
   - component: {fileID: 5542163039440582906}
+  - component: {fileID: 2202877333492470436}
+  - component: {fileID: 2080668977277101958}
   m_Layer: 8
   m_Name: AddGate
   m_TagString: Gate
@@ -206,6 +195,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24d849b7198b564d90ff7f5586afc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2202877333492470436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5542163039440582910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc0f03207f43a540a4bf7d9fe526aec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addendSocketObj0: {fileID: 5542163040654694170}
+  addendSocketObj1: {fileID: 5542163039034921984}
+  resultSocketObj: {fileID: 5542163040528103790}
+--- !u!114 &2080668977277101958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5542163039440582910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc0f03207f43a540a4bf7d9fe526aec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addendSocketObj0: {fileID: 0}
+  addendSocketObj1: {fileID: 0}
+  resultSocketObj: {fileID: 0}
 --- !u!1 &5542163040528103790
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,7 +236,6 @@ GameObject:
   - component: {fileID: 5542163040528103791}
   - component: {fileID: 5542163040528103784}
   - component: {fileID: 5542163040528103785}
-  - component: {fileID: 6519322682112649109}
   m_Layer: 8
   m_Name: ResultScoket
   m_TagString: OutputSocket
@@ -233,7 +251,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5542163040528103790}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.86, y: 0.632, z: -0.1}
+  m_LocalPosition: {x: 0.86, y: 0.632, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5542163039440582904}
@@ -277,18 +295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24d849b7198b564d90ff7f5586afc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6519322682112649109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542163040528103790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd2eaaa66166a044a24e339ed9742d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5542163040654694170
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +306,6 @@ GameObject:
   - component: {fileID: 5542163040654694171}
   - component: {fileID: 5542163040654694148}
   - component: {fileID: 5542163040654694149}
-  - component: {fileID: 8715394376245258329}
   m_Layer: 8
   m_Name: AddendSocket0
   m_TagString: InputSocket
@@ -316,7 +321,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5542163040654694170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.816, y: 0.632, z: -0.1}
+  m_LocalPosition: {x: -0.816, y: 0.632, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5542163039440582904}
@@ -358,17 +363,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e24d849b7198b564d90ff7f5586afc29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8715394376245258329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542163040654694170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30f84eb6d07113b4893fa0853e21650c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

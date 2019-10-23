@@ -236,6 +236,7 @@ namespace Assets.Scripts.porideki.circuit {
                 return false;
             } else {
                 this.gates.Add(gate);
+                Debug.Log("Gateを追加しました\nGateNum: " + this.gates.Count);
                 return true;
             }
 
@@ -253,6 +254,7 @@ namespace Assets.Scripts.porideki.circuit {
                 }
                 //Gate削除
                 this.gates.Remove(gate);
+                Debug.Log("Gateを削除しました\nGateNum: " + this.gates.Count);
                 return true;
             } else {
                 Debug.Log("指定したGateが見つかりませんでした");
