@@ -11,13 +11,21 @@ public class HandManager : MonoBehaviour {
     //プレハブ
     public GameObject linePrefab;
 
+    LineRenderer lr;
+
     [HideInInspector] public GameObject takingObject;    //掴んでいるオブジェクト
     [HideInInspector] public ReactiveProperty<GameObject> takingPaletteProperty; //パレットで選択中のGateオブジェクト
     [HideInInspector] public ReactiveProperty<GameObject> takingInputSocketProperty; //選択中のinソケット
     [HideInInspector] public ReactiveProperty<GameObject> takingOutputSocketProperty;   //選択中のoutソケット
 
+    //
+    private GameObject circuitStrage {
+        get { return GameObject.Find("CircuitStrage"); }
+    }
     //回路オブジェクト
-    private Circuit circuit;
+    private Circuit circuit {
+        get { return this.circuitStrage.GetComponent<CircuitStrage>().circuit; }
+    }
 
     //
     private GameObject takingLineObject;
@@ -34,9 +42,6 @@ public class HandManager : MonoBehaviour {
         this.takingInputSocketProperty = new ReactiveProperty<GameObject>();
         this.takingOutputSocketProperty = new ReactiveProperty<GameObject>();
         this.pointerTracer = new GameObject("PointerTracer");
-
-        //回路オブジェクト取得
-        this.circuit = GameObject.Find("CircuitStrage").GetComponent<CircuitStrage>().circuit;
 
         //リスナ登録
         //クリック時のログ表示
@@ -71,6 +76,7 @@ public class HandManager : MonoBehaviour {
                 if(button == PointerEventData.InputButton.Left && this.takingPaletteProperty.Value != null) {
                     //ビューにインスタンス化
                     GameObject instantiatedObject = Instantiate(this.takingPaletteProperty.Value);
+                    instantiatedObject.transform.parent = this.circuitStrage.transform; //親登録
                     //マウスポインタ位置に合わせる
                     Vector3 mousePos = Input.mousePosition;
                     mousePos.z = 10.0f;
