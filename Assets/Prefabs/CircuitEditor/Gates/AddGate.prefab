@@ -83,7 +83,6 @@ GameObject:
   - component: {fileID: 5542163039440582905}
   - component: {fileID: 5542163039440582906}
   - component: {fileID: 2202877333492470436}
-  - component: {fileID: 2080668977277101958}
   m_Layer: 8
   m_Name: AddGate
   m_TagString: Gate
@@ -210,21 +209,6 @@ MonoBehaviour:
   addendSocketObj0: {fileID: 5542163040654694170}
   addendSocketObj1: {fileID: 5542163039034921984}
   resultSocketObj: {fileID: 5542163040528103790}
---- !u!114 &2080668977277101958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542163039440582910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffc0f03207f43a540a4bf7d9fe526aec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addendSocketObj0: {fileID: 0}
-  addendSocketObj1: {fileID: 0}
-  resultSocketObj: {fileID: 0}
 --- !u!1 &5542163040528103790
 GameObject:
   m_ObjectHideFlags: 0

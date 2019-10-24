@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 275410056}
   - component: {fileID: 275410055}
   - component: {fileID: 275410054}
+  - component: {fileID: 275410057}
   m_Layer: 5
   m_Name: Palette
   m_TagString: Untagged
@@ -229,6 +230,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275410052}
   m_CullTransparentMesh: 0
+--- !u!114 &275410057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275410052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 141a34415b288a24fbc04407d5740a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &305253172
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,7 +311,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000010828933}
+  m_AnchoredPosition: {x: 0, y: 19.526432}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &749752768
@@ -684,7 +697,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1636751233}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.7938739
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -836,6 +849,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1558892736}
+  - component: {fileID: 1558892737}
   m_Layer: 0
   m_Name: CircuitStrage
   m_TagString: Untagged
@@ -857,6 +871,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1558892737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558892735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62776421b737d6a4081dea323d9afd38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1564529646
 GameObject:
   m_ObjectHideFlags: 0
@@ -1178,6 +1204,12 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: -20.7
       objectReference: {fileID: 0}
+    - target: {fileID: 4273078724774194800, guid: 0bdc81863f4b7f4449bb2c3007509501,
+        type: 3}
+      propertyPath: prefab
+      value: 
+      objectReference: {fileID: 5542163039440582910, guid: bcbb5e233aa78c449b247b3cde73c99f,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bdc81863f4b7f4449bb2c3007509501, type: 3}
 --- !u!224 &1793128219 stripped
