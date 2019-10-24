@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,9 +11,10 @@ public class HandManager : MonoBehaviour {
     //プレハブ
     public GameObject linePrefab;
 
-    [HideInInspector]public GameObject takingObject;    //掴んでいるオブジェクト
-    [HideInInspector]public ReactiveProperty<GameObject> takingPaletteProperty; //パレットで選択中のGateオブジェクト
-    [HideInInspector] public ReactiveProperty<GameObject> takingSocketProperty; //選択中のソケット
+    [HideInInspector] public GameObject takingObject;    //掴んでいるオブジェクト
+    [HideInInspector] public ReactiveProperty<GameObject> takingPaletteProperty; //パレットで選択中のGateオブジェクト
+    [HideInInspector] public ReactiveProperty<GameObject> takingInputSocketProperty; //選択中のinソケット
+    [HideInInspector] public ReactiveProperty<GameObject> takingOutputSocketProperty;   //選択中のoutソケット
 
     //回路オブジェクト
     private Circuit circuit;
@@ -29,7 +31,8 @@ public class HandManager : MonoBehaviour {
 
         //インスタンス化
         this.takingPaletteProperty = new ReactiveProperty<GameObject>();
-        this.takingSocketProperty = new ReactiveProperty<GameObject>();
+        this.takingInputSocketProperty = new ReactiveProperty<GameObject>();
+        this.takingOutputSocketProperty = new ReactiveProperty<GameObject>();
         this.pointerTracer = new GameObject("PointerTracer");
 
         //回路オブジェクト取得
@@ -39,6 +42,9 @@ public class HandManager : MonoBehaviour {
         //クリック時のログ表示
         this.takingPaletteProperty.Where(paleteObject => paleteObject != null)
                                 .Subscribe(paletteObject => Debug.Log(paletteObject.name));
+        //ソケットクリック時のコネクション確率
+        this.takingInputSocketProperty.Subscribe(_ => this.TryConnection());
+        this.takingOutputSocketProperty.Subscribe(_ => this.TryConnection());
 
         //ポインタのワールド座標トレース
         Observable.EveryFixedUpdate()
@@ -86,20 +92,11 @@ public class HandManager : MonoBehaviour {
                 break;
 
             case "InputSocket":
+                this.takingInputSocketProperty.Value = pointerEventData.pointerEnter;
+                break;
+
             case "OutputSocket":
-                if(button == PointerEventData.InputButton.Left) {   //左クリック
-                    if (this.takingSocketProperty.Value == null) {  //新規ライン
-
-                    } else if(this.takingSocketProperty.Value != pointerEventData.pointerEnter.gameObject){ //ライン設定
-
-                    }
-                }else if(button == PointerEventData.InputButton.Right) {    //右クリック
-                    if (this.takingSocketProperty.Value == null) {
-
-                    } else {
-
-                    }
-                }
+                this.takingOutputSocketProperty.Value = pointerEventData.pointerEnter;
                 break;
 
             default:
@@ -114,6 +111,21 @@ public class HandManager : MonoBehaviour {
                 this.takingLineObject = null;
                 GameObject.Destroy(buf);
             }
+        }
+
+    }
+
+    private void TryConnection() {
+
+        object inputSocket, outputSocket;
+        if(((inputSocket = this.takingInputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
+            && ((outputSocket = this.takingOutputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)) {
+            Circuit.MakeConnection(inputSocket, outputSocket);
+            this.takingInputSocketProperty.Value = null;
+            this.takingOutputSocketProperty.Value = null;
+            Debug.Log("Dane Connect");
+        } else {
+            Debug.Log("Failed Connect");
         }
 
     }
