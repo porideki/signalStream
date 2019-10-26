@@ -18,6 +18,7 @@ public class HandManager : MonoBehaviour {
     [HideInInspector] public ReactiveProperty<GameObject> takingOutputSocketProperty;   //選択中のoutソケット
 
     private List<GameObject> streamLines;
+    private GameObject sockToMouseStreamLine;
 
     //
     private GameObject circuitStrage {
@@ -50,8 +51,8 @@ public class HandManager : MonoBehaviour {
         this.takingPaletteProperty.Where(paleteObject => paleteObject != null)
                                 .Subscribe(paletteObject => Debug.Log(paletteObject.name));
         //ソケットクリック時のコネクション確率
-        this.takingInputSocketProperty.Subscribe(_ => this.TryConnection());
-        this.takingOutputSocketProperty.Subscribe(_ => this.TryConnection());
+        this.takingInputSocketProperty.DistinctUntilChanged().Subscribe(_ => this.TryConnection());
+        this.takingOutputSocketProperty.DistinctUntilChanged().Subscribe(_ => this.TryConnection());
 
         //ポインタのワールド座標トレース
         Observable.EveryFixedUpdate()
@@ -76,6 +77,7 @@ public class HandManager : MonoBehaviour {
             case "Background":
                 //左クリック時
                 if(button == PointerEventData.InputButton.Left && this.takingPaletteProperty.Value != null) {
+
                     //ビューにインスタンス化
                     GameObject instantiatedObject = Instantiate(this.takingPaletteProperty.Value);
                     instantiatedObject.transform.parent = this.circuitStrage.transform; //親登録
@@ -86,6 +88,12 @@ public class HandManager : MonoBehaviour {
                     //回路に追加
                     var gate = instantiatedObject.GetComponent<GateUI>().Generate();
                     this.circuit.AddGate(gate);
+
+                }else if(button == PointerEventData.InputButton.Right) {
+
+                    //マウス追従ライン削除
+                    GameObject.Destroy(this.sockToMouseStreamLine);
+
                 }
                 break;
 
@@ -98,7 +106,12 @@ public class HandManager : MonoBehaviour {
 
             case "InputSocket":
                 if(button == PointerEventData.InputButton.Left) {
-                    this.takingInputSocketProperty.Value = pointerEventData.pointerEnter;
+                    if(this.streamLines.Count(lineObject => {
+                        var lineController = lineObject.GetComponent<LineController>();
+                        return lineController.IsBindTo(pointerEventData.pointerEnter.GetComponent<ObjectAllocator>().allocatedObj);
+                    }) == 0) {
+                        this.takingInputSocketProperty.Value = pointerEventData.pointerEnter;
+                    }
                 } else if(button == PointerEventData.InputButton.Right) {
                     this.RemoveConnection(pointerEventData.pointerEnter);
                 }
@@ -130,10 +143,16 @@ public class HandManager : MonoBehaviour {
 
     private void TryConnection() {
 
+        //マウス追従のLineを削除
+        GameObject.Destroy(this.sockToMouseStreamLine);
+
         object inputSocket, outputSocket;
-        if(((inputSocket = this.takingInputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
+
+        //両方notNull
+        if (((inputSocket = this.takingInputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
             && ((outputSocket = this.takingOutputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
             && (!Circuit.HasConnection(inputSocket, outputSocket))) {
+
             //コネクション作成
             Circuit.MakeConnection(inputSocket, outputSocket);
             //Line作成
@@ -149,6 +168,24 @@ public class HandManager : MonoBehaviour {
             this.takingOutputSocketProperty.Value = null;
 
             Debug.Log("Dane Connect");
+
+        //片方Null
+        } else if (((inputSocket = this.takingInputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
+            ^ ((outputSocket = this.takingOutputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)) {
+
+            //インスタンス生成
+            this.sockToMouseStreamLine = GameObject.Instantiate(this.linePrefab);
+            //LineController取得
+            var lineController = this.sockToMouseStreamLine.GetComponent<LineController>();
+            //バインド設定
+            if (inputSocket == null) {  //mouse -> outsocket
+                lineController.bindedStartGameObject.Value = this.pointerTracer;
+                lineController.bindedEndGameObject.Value = this.takingOutputSocketProperty.Value;
+            } else {    //insocket -> mouse
+                lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;
+                lineController.bindedEndGameObject.Value = this.pointerTracer;
+            }
+
         } else {
             Debug.Log("Failed Connect");
         }
