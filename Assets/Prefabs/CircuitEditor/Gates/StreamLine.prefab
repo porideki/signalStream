@@ -204,3 +204,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startTransform: {fileID: 4512983333893680024}
   endTransform: {fileID: 2178524932979980638}
+  lineZ: 0.2

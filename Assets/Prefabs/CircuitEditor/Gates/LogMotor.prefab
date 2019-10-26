@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5542163039440582911}
   - component: {fileID: 5542163039440582905}
   - component: {fileID: 5542163039440582906}
+  - component: {fileID: 8345043834987546561}
   - component: {fileID: 8830541973005287630}
   m_Layer: 8
   m_Name: LogMotor
@@ -120,6 +121,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e24d849b7198b564d90ff7f5586afc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8345043834987546561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5542163039440582910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8e525df0aba0034faf91401aeb34822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8830541973005287630
