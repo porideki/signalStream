@@ -91,11 +91,8 @@ public class HandManager : MonoBehaviour {
 
             case "Gate":
                 if (button == PointerEventData.InputButton.Right) {
-                    Debug.Log("Destroy!");
-                    //Gateを回路から削除
-                    this.circuit.RemoveGate(pointerEventData.pointerEnter.gameObject.GetComponent<GateUI>().allocatedGate);
-                    //UIオブジェクトを削除
-                    GameObject.Destroy(pointerEventData.pointerEnter.gameObject);
+                    Debug.Log("Destroyed " + pointerEventData.pointerEnter.name);
+                    this.RemoveGate(pointerEventData.pointerEnter);
                 }
                 break;
 
@@ -182,6 +179,24 @@ public class HandManager : MonoBehaviour {
             }
         }
         
+
+    }
+
+    private void RemoveGate(GameObject gateUIObj) {
+
+        GateUI gateUI;
+        if((gateUI = gateUIObj.GetComponent<GateUI>()) != null) {
+
+            var socketObjects = new List<GameObject>(gateUI.GetSocketObjects());    //list変換
+            socketObjects.ForEach(socketObject => { //コネクション+インジケータ削除
+                this.RemoveConnection(socketObject);
+            });
+            //回路から削除
+            this.circuit.RemoveGate(gateUI.allocatedGate);
+            //UI削除
+            GameObject.Destroy(gateUIObj);
+
+        }
 
     }
 

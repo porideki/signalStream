@@ -11,4 +11,6 @@ public abstract class GateUI : MonoBehaviour {
 
     internal abstract Gate Generate();
 
+    internal abstract GameObject[] GetSocketObjects();
+
 }

@@ -22,4 +22,8 @@ public class FrameSensor : GateUI {
 
     }
 
+    internal override GameObject[] GetSocketObjects() {
+        return new GameObject[] { this.resultSocketObj };
+    }
+
 }

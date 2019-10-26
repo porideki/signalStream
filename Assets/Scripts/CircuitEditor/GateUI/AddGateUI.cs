@@ -31,4 +31,8 @@ public class AddGateUI : GateUI {
         
     }
 
+    internal override GameObject[] GetSocketObjects() {
+        return new GameObject[] { this.addendSocketObj0, this.addendSocketObj1, this.resultSocketObj };
+    }
+
 }

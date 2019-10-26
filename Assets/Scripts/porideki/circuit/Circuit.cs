@@ -42,9 +42,27 @@ namespace Assets.Scripts.porideki.circuit {
             }
         }
 
+        internal ReactiveProperty<bool> IsRunning;
+
         public Circuit() {
 
             this.gates = new ReactiveCollection<Gate>();
+            this.IsRunning = new ReactiveProperty<bool>(false); //初期状態は「停止」
+
+            //動作状態リスナー
+            this.IsRunning.Subscribe(isRunning => {
+                if (isRunning) {
+                    //起動
+                    foreach (Gate gate in this.gates) {
+                        gate.Start();
+                    }
+                } else {
+                    //停止
+                    foreach (Gate gate in this.gates) {
+                        gate.Stop();
+                    }
+                }
+            });
 
         }
 
@@ -236,6 +254,9 @@ namespace Assets.Scripts.porideki.circuit {
                 return false;
             } else {
                 this.gates.Add(gate);
+                //動作状態設定
+                if (this.IsRunning.Value) gate.Start();
+                else gate.Stop();
                 Debug.Log("Gateを追加しました\nGateNum: " + this.gates.Count);
                 return true;
             }
@@ -266,15 +287,11 @@ namespace Assets.Scripts.porideki.circuit {
         #endregion
 
         internal void Start() {
-            foreach(Gate gate in this.gates) {
-                gate.Start();
-            }
+            this.IsRunning.Value = true;
         }
 
         internal void Stop() {
-            foreach (Gate gate in this.gates) {
-                gate.Stop();
-            }
+            this.IsRunning.Value = false;
         }
 
     }

@@ -22,4 +22,8 @@ public class LogMotor : GateUI {
 
     }
 
+    internal override GameObject[] GetSocketObjects() {
+        return new GameObject[] { this.inputSocketObj };
+    }
+
 }
