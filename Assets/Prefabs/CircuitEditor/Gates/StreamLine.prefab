@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2178524932979980638}
   m_Layer: 8
-  m_Name: outPoint
+  m_Name: endPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4512983333893680024}
   m_Layer: 8
-  m_Name: inPoint
+  m_Name: startPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,8 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5880227851317183746}
   - component: {fileID: 5880227851317183745}
-  - component: {fileID: 5880227851317183744}
-  - component: {fileID: 4392981306618013976}
+  - component: {fileID: 1663462456466009582}
   m_Layer: 8
   m_Name: StreamLine
   m_TagString: Untagged
@@ -191,21 +190,7 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!64 &5880227851317183744
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5880227851317183775}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 0}
---- !u!114 &4392981306618013976
+--- !u!114 &1663462456466009582
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,8 +199,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5880227851317183775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 711c71770bb7f8243b3b0636cf859dca, type: 3}
+  m_Script: {fileID: 11500000, guid: afb4769599bbdab46be422dce6dde818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inTransform: {fileID: 4512983333893680024}
-  outTransform: {fileID: 2178524932979980638}
+  startTransform: {fileID: 4512983333893680024}
+  endTransform: {fileID: 2178524932979980638}

@@ -18,6 +18,8 @@ public class HandManager : MonoBehaviour {
     [HideInInspector] public ReactiveProperty<GameObject> takingInputSocketProperty; //選択中のinソケット
     [HideInInspector] public ReactiveProperty<GameObject> takingOutputSocketProperty;   //選択中のoutソケット
 
+    private List<GameObject> streamLines;
+
     //
     private GameObject circuitStrage {
         get { return GameObject.Find("CircuitStrage"); }
@@ -42,6 +44,7 @@ public class HandManager : MonoBehaviour {
         this.takingInputSocketProperty = new ReactiveProperty<GameObject>();
         this.takingOutputSocketProperty = new ReactiveProperty<GameObject>();
         this.pointerTracer = new GameObject("PointerTracer");
+        this.streamLines = new List<GameObject>();
 
         //リスナ登録
         //クリック時のログ表示
@@ -98,11 +101,19 @@ public class HandManager : MonoBehaviour {
                 break;
 
             case "InputSocket":
-                this.takingInputSocketProperty.Value = pointerEventData.pointerEnter;
+                if(button == PointerEventData.InputButton.Left) {
+                    this.takingInputSocketProperty.Value = pointerEventData.pointerEnter;
+                } else if(button == PointerEventData.InputButton.Right) {
+                    this.RemoveConnection(pointerEventData.pointerEnter);
+                }
                 break;
 
             case "OutputSocket":
-                this.takingOutputSocketProperty.Value = pointerEventData.pointerEnter;
+                if (button == PointerEventData.InputButton.Left) {
+                    this.takingOutputSocketProperty.Value = pointerEventData.pointerEnter;
+                } else if (button == PointerEventData.InputButton.Right) {
+                    this.RemoveConnection(pointerEventData.pointerEnter);
+                }
                 break;
 
             default:
@@ -125,13 +136,36 @@ public class HandManager : MonoBehaviour {
 
         object inputSocket, outputSocket;
         if(((inputSocket = this.takingInputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
-            && ((outputSocket = this.takingOutputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)) {
+            && ((outputSocket = this.takingOutputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
+            && (!Circuit.HasConnection(inputSocket, outputSocket))) {
+            //コネクション作成
             Circuit.MakeConnection(inputSocket, outputSocket);
+            //Line作成
+            var lineControllerObj = GameObject.Instantiate(this.linePrefab);
+            lineControllerObj.transform.parent = this.circuitStrage.transform;
+            lineControllerObj.SetActive(false);
+            var lineController = lineControllerObj.GetComponent<LineController>();
+            lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;
+            lineController.bindedEndGameObject.Value = this.takingOutputSocketProperty.Value;
+            lineControllerObj.SetActive(true);
+            //割当削除
             this.takingInputSocketProperty.Value = null;
             this.takingOutputSocketProperty.Value = null;
+
             Debug.Log("Dane Connect");
         } else {
             Debug.Log("Failed Connect");
+        }
+
+    }
+
+    private void RemoveConnection(GameObject socketObj) {
+
+        var socket = socketObj.GetComponent<ObjectAllocator>().allocatedObj;
+        if (Circuit.RemoveConnection(socket)) {
+            Debug.Log("Connection Removed");
+        } else {
+            Debug.Log("Removing Connection failed");
         }
 
     }
