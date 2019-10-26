@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -14,6 +15,9 @@ public class LineController : MonoBehaviour {
 
     private LineRenderer lineRenderer;
 
+    private IDisposable transformFitObservable;
+    private IDisposable lineFitObservable;
+
     public void Awake() {
 
         //インスタンス化
@@ -24,7 +28,7 @@ public class LineController : MonoBehaviour {
         this.lineRenderer = this.GetComponent<LineRenderer>();
 
         //始点終点位置合わせ(Transform)
-        Observable.EveryFixedUpdate()
+        this.transformFitObservable = Observable.EveryFixedUpdate()
             .Where(fr => {
                 return this.bindedStartGameObject.HasValue
                 && this.bindedEndGameObject.HasValue;
@@ -41,7 +45,7 @@ public class LineController : MonoBehaviour {
             });
 
         //終点始点位置合わせ(LineRenderer)
-        Observable.EveryFixedUpdate()
+        this.lineFitObservable = Observable.EveryFixedUpdate()
             .Subscribe(fr => {
                 this.lineRenderer.SetPositions(new Vector3[] {
                     this.startTransform.position,
@@ -49,6 +53,35 @@ public class LineController : MonoBehaviour {
                 });
             });
 
+    }
+
+    public void OnDestroy() {
+
+        //購読中止
+        this.transformFitObservable.Dispose();
+        this.lineFitObservable.Dispose();
+
+        //参照破棄
+        this.bindedStartGameObject.Value = null;
+        this.bindedEndGameObject.Value = null;
+
+    }
+
+    public bool IsBindTo(object socket) {
+
+        object allocatedObj;
+        bool inBindTo = false;
+        bool outBindTo = false;
+        //inputSocket
+        if ((allocatedObj = this.bindedStartGameObject.Value.GetComponent<ObjectAllocator>().allocatedObj) != null) {
+            inBindTo = allocatedObj.Equals(socket);
+        } else inBindTo = false;
+        //outputSocket
+        if ((allocatedObj = this.bindedEndGameObject.Value.GetComponent<ObjectAllocator>().allocatedObj) != null) {
+            outBindTo = allocatedObj.Equals(socket);
+        } else outBindTo = false;
+
+        return inBindTo || outBindTo;
     }
 
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using Assets.Scripts.porideki.circuit;
 using System.Collections.Generic;
+using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UniRx;
-using Assets.Scripts.porideki.circuit;
 
 public class HandManager : MonoBehaviour {
 
@@ -68,7 +67,7 @@ public class HandManager : MonoBehaviour {
     public void OnCkickedHub(PointerEventData pointerEventData) {
 
         //コンソール表示
-        Debug.Log(pointerEventData.pointerEnter.gameObject.tag + "\nButton: " + pointerEventData.button);
+        Debug.Log(pointerEventData.pointerEnter + "(" + pointerEventData.pointerEnter.gameObject.tag + ")\nButton: " + pointerEventData.button);
         PointerEventData.InputButton button = pointerEventData.button;
 
         //タグ別動作
@@ -142,13 +141,13 @@ public class HandManager : MonoBehaviour {
             Circuit.MakeConnection(inputSocket, outputSocket);
             //Line作成
             var lineControllerObj = GameObject.Instantiate(this.linePrefab);
-            lineControllerObj.transform.parent = this.circuitStrage.transform;
-            lineControllerObj.SetActive(false);
-            var lineController = lineControllerObj.GetComponent<LineController>();
-            lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;
+            lineControllerObj.transform.parent = this.circuitStrage.transform;  //親設定
+            var lineController = lineControllerObj.GetComponent<LineController>();  //LineControllser取得
+            lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;  //追従Transform設定
             lineController.bindedEndGameObject.Value = this.takingOutputSocketProperty.Value;
-            lineControllerObj.SetActive(true);
-            //割当削除
+            //Line一覧に追加
+            this.streamLines.Add(lineControllerObj);
+            //手持ち割当削除
             this.takingInputSocketProperty.Value = null;
             this.takingOutputSocketProperty.Value = null;
 
@@ -161,12 +160,28 @@ public class HandManager : MonoBehaviour {
 
     private void RemoveConnection(GameObject socketObj) {
 
-        var socket = socketObj.GetComponent<ObjectAllocator>().allocatedObj;
-        if (Circuit.RemoveConnection(socket)) {
-            Debug.Log("Connection Removed");
-        } else {
-            Debug.Log("Removing Connection failed");
+        Debug.Log(socketObj.name);
+
+        object socket;  //RemoveConnectionするSocket
+        if((socket = socketObj.GetComponent<ObjectAllocator>().allocatedObj) != null) {
+            if (Circuit.RemoveConnection(socket)) {
+                //削除対象Line(GameObject)を別リストに対比(foreach内で回転元のリストを編集出来ないため)
+                var removeLines = this.streamLines
+                    .Where(gameObject => (gameObject.GetComponent<LineController>() != null)
+                                        && gameObject.GetComponent<LineController>().IsBindTo(socket))
+                    .ToList();
+                //削除
+                removeLines.ForEach(gameObject => {
+                    this.streamLines.Remove(gameObject);
+                    GameObject.Destroy(gameObject);
+                });
+                //Log表示
+                Debug.Log("Connection Removed");
+            } else {
+                Debug.Log("Removing Connection failed");
+            }
         }
+        
 
     }
 
