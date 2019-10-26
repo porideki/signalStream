@@ -51,8 +51,8 @@ public class HandManager : MonoBehaviour {
         this.takingPaletteProperty.Where(paleteObject => paleteObject != null)
                                 .Subscribe(paletteObject => Debug.Log(paletteObject.name));
         //ソケットクリック時のコネクション確率
-        this.takingInputSocketProperty.DistinctUntilChanged().Subscribe(_ => this.TryConnection());
-        this.takingOutputSocketProperty.DistinctUntilChanged().Subscribe(_ => this.TryConnection());
+        this.takingInputSocketProperty.Subscribe(_ => this.TryConnection());
+        this.takingOutputSocketProperty.Subscribe(_ => this.TryConnection());
 
         //ポインタのワールド座標トレース
         Observable.EveryFixedUpdate()

@@ -26,6 +26,7 @@ public class LineController : MonoBehaviour {
 
         //LineRenderer取得
         this.lineRenderer = this.GetComponent<LineRenderer>();
+        this.lineRenderer.enabled = false;
 
         //始点終点位置合わせ(Transform)
         this.transformFitObservable = Observable.EveryFixedUpdate()
@@ -52,6 +53,11 @@ public class LineController : MonoBehaviour {
                     this.endTransform.position
                 });
             });
+
+        //表示非表示設定
+        Func<GameObject, bool> isBothSocketBinded = gameObject => this.bindedStartGameObject.HasValue && this.bindedEndGameObject.HasValue;  //両端がバインドされている
+        this.bindedStartGameObject.Where(isBothSocketBinded).Subscribe(gameObject => this.lineRenderer.enabled = true );
+        this.bindedEndGameObject.Where(isBothSocketBinded).Subscribe(gameObject => this.lineRenderer.enabled = true);
 
     }
 
