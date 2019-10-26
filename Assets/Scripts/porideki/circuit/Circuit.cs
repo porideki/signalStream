@@ -275,6 +275,9 @@ namespace Assets.Scripts.porideki.circuit {
                 }
                 //Gate削除
                 this.gates.Remove(gate);
+                //オブジェクト破棄
+                gate.Dispose();
+                //Log
                 Debug.Log("Gateを削除しました\nGateNum: " + this.gates.Count);
                 return true;
             } else {

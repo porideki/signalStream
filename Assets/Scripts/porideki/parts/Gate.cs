@@ -8,18 +8,20 @@ using UniRx;
 using Assets.Scripts.porideki.parts;
 
 namespace Assets.Scripts.porideki.parts {
-    abstract class Gate {
+    abstract class Gate : IDisposable {
 
         private bool isRun;
         public bool IsRun {
             get { return this.isRun; }
         }
 
+        private IDisposable processObserver;
+
         public Gate() {
 
             this.isRun = false;
 
-            Observable.EveryUpdate()
+            this.processObserver = Observable.EveryUpdate()
                 .Where(f => this.isRun)
                 .Subscribe(_ => this.Process());
 
@@ -42,6 +44,11 @@ namespace Assets.Scripts.porideki.parts {
 
         internal abstract object[] GetOutputSockets();
 
+        public void Dispose() {
+
+            this.processObserver.Dispose();
+
+        }
 
     }
 }
