@@ -1,11 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UniRx;
 
 public class CameraDrag : MonoBehaviour, IDragHandler {
 
     public EditorCameraController editorCameraController;
+
+    private IDisposable scrollListerner;
+
+    public void Awake() {
+
+        this.scrollListerner = Observable.EveryFixedUpdate()
+            .Subscribe(fr => {
+                this.editorCameraController.PinchCameraDelta(Input.mouseScrollDelta.y * -0.5f);
+            });
+
+    }
 
     public void OnDrag(PointerEventData pointerEventData) {
 
@@ -28,10 +41,14 @@ public class CameraDrag : MonoBehaviour, IDragHandler {
             delta.y *= -1;
 
             //カメラ・背景移動
-            this.editorCameraController.MoveCamera(delta);
+            this.editorCameraController.MoveCameraDelta(delta);
 
         }
 
+    }
+
+    public void OnDestroy() {
+        this.scrollListerner.Dispose();
     }
     
 }
