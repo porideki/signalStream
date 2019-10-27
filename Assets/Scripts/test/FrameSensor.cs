@@ -9,6 +9,7 @@ public class FrameSensor : GateUI {
     [SerializeField]private GameObject resultSocketObj;
 
     internal override Gate Generate() {
+        base.Generate();
 
         var funcGate = new FunctionSensor<double>(() => {
             return (double)Time.frameCount;

@@ -9,6 +9,7 @@ public class LogMotor : GateUI {
     [SerializeField] private GameObject inputSocketObj;
 
     internal override Gate Generate() {
+        base.Generate();
 
         var functionGate = new ActionMotor<double>(value => {
             Debug.Log("LogMotor> " + value);

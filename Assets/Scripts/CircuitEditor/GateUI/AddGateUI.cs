@@ -12,6 +12,7 @@ public class AddGateUI : GateUI {
     [SerializeField] private GameObject resultSocketObj;
 
     internal override Gate Generate() {
+        base.Generate();
 
         //ゲート作成
         var sumGate = new SumGate();
