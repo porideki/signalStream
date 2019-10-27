@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - InputSocket
+  - OutputSocket
+  - PaletteElement
+  - Gate
+  - Background
   layers:
   - Default
   - TransparentFX
@@ -13,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Sprite
   - 
   - 
   - 
@@ -38,6 +43,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Backgrounds
+    uniqueID: 2501298737
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BehindObject
+    uniqueID: 250467507
+    locked: 0
+  - name: Player
+    uniqueID: 1523225829
+    locked: 0
+  - name: FrontObject
+    uniqueID: 880088891
     locked: 0

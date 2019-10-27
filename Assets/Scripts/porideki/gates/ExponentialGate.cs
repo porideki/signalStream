@@ -33,5 +33,13 @@ namespace Assets.Scripts.porideki.gates {
 
         }
 
+        internal override object[] GetInputSockets() {
+            return new object[] { this.baseSocket, this.exponentSocket, this.defaultSocket };
+        }
+
+        internal override object[] GetOutputSockets() {
+            return new object[] { this.resultSocket };
+        }
+
     }
 }

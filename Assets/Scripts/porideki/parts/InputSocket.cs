@@ -8,6 +8,7 @@ using UniRx;
 namespace Assets.Scripts.porideki.parts {
     public class InputSocket<T> {
 
+        internal ReactiveProperty<OutputSocket<T>> parentSocket;
         private ReactiveProperty<T> valueProperty;
         //購読のみ
         public IReadOnlyReactiveProperty<T> readOnlyValueProperty {
@@ -16,8 +17,16 @@ namespace Assets.Scripts.porideki.parts {
 
         public InputSocket(T initialValue) {
 
+            //インスタンス
+            this.parentSocket = new ReactiveProperty<OutputSocket<T>>();
             this.valueProperty = new ReactiveProperty<T>();
+
+            //値初期化
             this.Set(initialValue);
+
+            //入力元がnullった時
+            this.parentSocket.Where(outputSocket => outputSocket == null)
+                .Subscribe(outputSocket => this.Set(default(T)));
 
         }
 
