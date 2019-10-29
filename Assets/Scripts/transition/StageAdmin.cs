@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class StageAdmin : MonoBehaviour {
 
+    public int startSectionIndex;
     public GameObject[] roots;
+
+    public void Start() {
+
+        this.Transition(this.startSectionIndex);
+
+    }
 
     public void Transition(int i) {
 
