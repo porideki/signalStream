@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageAdmin : MonoBehaviour {
 
@@ -40,6 +41,10 @@ public class StageAdmin : MonoBehaviour {
         } else {
             Debug.LogError("指定が範囲外です(length: " + this.roots.Length + ", i: " + i + ")");
         }
+    }
+
+    public void LoadScene(string sceneName) {
+        SceneManager.LoadScene("sceneName");
     }
 
 }
