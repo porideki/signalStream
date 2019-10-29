@@ -8,11 +8,13 @@ public class EditorCameraController : MonoBehaviour {
 
     private Vector3 initialBackgroundScale;
     private float initislScreenSize;
+    private Camera editorCamera;
 
     public void Awake() {
 
         this.initialBackgroundScale = this.backgroundTransform.localScale;
         this.initislScreenSize = Camera.main.orthographicSize;
+        this.editorCamera = GameObject.Find("EditorCamera").GetComponent<Camera>();
 
     }
 
@@ -37,7 +39,7 @@ public class EditorCameraController : MonoBehaviour {
 
     public void PinchCameraDelta(float delta) {
 
-        var size = Camera.main.orthographicSize;
+        var size = this.editorCamera.orthographicSize;
         size += delta;
 
         this.PinchCamera(size);
@@ -49,10 +51,10 @@ public class EditorCameraController : MonoBehaviour {
         size = Mathf.Max(1, size);
 
         //カメラサイズ
-        Camera.main.orthographicSize = size;
+        this.editorCamera.orthographicSize = size;
 
         //背景サイズ
-        var screenScale = Camera.main.orthographicSize / this.initislScreenSize;
+        var screenScale = this.editorCamera.orthographicSize / this.initislScreenSize;
         var backgroundScale = this.initialBackgroundScale * screenScale;
         initialBackgroundScale.z = 0;
         this.backgroundTransform.localScale = backgroundScale;

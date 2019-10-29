@@ -19,6 +19,7 @@ public class HandManager : MonoBehaviour {
 
     private List<GameObject> streamLines;
     private GameObject sockToMouseStreamLine;
+    private Camera editorCamera;
 
     //
     private GameObject circuitStrage {
@@ -46,6 +47,8 @@ public class HandManager : MonoBehaviour {
         this.pointerTracer = new GameObject("PointerTracer");
         this.streamLines = new List<GameObject>();
 
+        this.editorCamera = GameObject.Find("EditorCamera").GetComponent<Camera>();
+
         //リスナ登録
         //クリック時のログ表示
         this.takingPaletteProperty.Where(paleteObject => paleteObject != null)
@@ -59,7 +62,7 @@ public class HandManager : MonoBehaviour {
             .Select(_ => {
                 Vector3 mousePosition = Input.mousePosition;
                 mousePosition.z = 10.0f;
-                return Camera.main.ScreenToWorldPoint(mousePosition);
+                return this.editorCamera.ScreenToWorldPoint(mousePosition);
             })
             .Subscribe(mousePosition => this.pointerTracer.transform.position = mousePosition);
 

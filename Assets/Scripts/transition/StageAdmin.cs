@@ -7,8 +7,11 @@ public class StageAdmin : MonoBehaviour {
     public int startSectionIndex;
     public GameObject[] roots;
 
+    private int? currentSection;
+
     public void Start() {
 
+        this.currentSection = null;
         this.Transition(this.startSectionIndex);
 
     }
@@ -20,13 +23,20 @@ public class StageAdmin : MonoBehaviour {
             root.SetActive(false);
         }
 
-        //指定rootをアクティブ
         if(0 <= i && i < this.roots.Length) {
-            this.roots[i].SetActive(true);
             SectionRoot sectionRoot;
+            //アクティベート
+            this.roots[i].SetActive(true);
             if((sectionRoot = this.roots[i].GetComponent<SectionRoot>()) != null) {
                 sectionRoot.OnTransition();
             }
+            //ディアクティベート
+            if(this.currentSection != null) {
+                if ((sectionRoot = this.roots[(int)this.currentSection].GetComponent<SectionRoot>()) != null) {
+                    sectionRoot.OnReaved();
+                }
+            }
+            this.currentSection = i;
         } else {
             Debug.LogError("指定が範囲外です(length: " + this.roots.Length + ", i: " + i + ")");
         }
