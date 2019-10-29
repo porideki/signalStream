@@ -9,6 +9,7 @@ public class HandManager : MonoBehaviour {
 
     //プレハブ
     public GameObject linePrefab;
+    public Transform GateParent;
 
     LineRenderer lr;
 
@@ -83,7 +84,7 @@ public class HandManager : MonoBehaviour {
 
                     //ビューにインスタンス化
                     GameObject instantiatedObject = Instantiate(this.takingPaletteProperty.Value);
-                    instantiatedObject.transform.parent = this.circuitStrage.transform; //親登録
+                    instantiatedObject.transform.parent = this.GateParent; //親登録
                     //マウスポインタ位置に合わせる
                     Vector3 mousePos = Input.mousePosition;
                     mousePos.z = 10.0f;
@@ -160,7 +161,7 @@ public class HandManager : MonoBehaviour {
             Circuit.MakeConnection(inputSocket, outputSocket);
             //Line作成
             var lineControllerObj = GameObject.Instantiate(this.linePrefab);
-            lineControllerObj.transform.parent = this.circuitStrage.transform;  //親設定
+            lineControllerObj.transform.parent = this.GateParent;  //親設定
             var lineController = lineControllerObj.GetComponent<LineController>();  //LineControllser取得
             lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;  //追従Transform設定
             lineController.bindedEndGameObject.Value = this.takingOutputSocketProperty.Value;
