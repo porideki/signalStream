@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.porideki.parts;
+using UnityEngine;
 
 namespace Assets.Scripts.porideki.gates {
     class UnfoldGate : Gate{
@@ -22,13 +23,17 @@ namespace Assets.Scripts.porideki.gates {
             this.falseValueSocket = new InputSocket<double>(falseValue);
             this.resultSocket = new OutputSocket<double>();
 
+            //応急
+            this.trueValueSocket.Set(trueValue);
+            this.falseValueSocket.Set(falseValue);
+
         }
 
         protected override void Process() {
             base.Process();
 
             this.resultSocket.Set(this.valueSocket.Get() 
-                ? this.trueValueSocket.Get() 
+                ? this.trueValueSocket.Get()
                 : this.falseValueSocket.Get());
         }
 

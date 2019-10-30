@@ -4,6 +4,7 @@ using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Assets.Scripts.porideki.parts;
 
 public class HandManager : MonoBehaviour {
 
@@ -84,6 +85,7 @@ public class HandManager : MonoBehaviour {
 
                     //ビューにインスタンス化
                     GameObject instantiatedObject = Instantiate(this.takingPaletteProperty.Value);
+                    instantiatedObject.SetActive(true);
                     instantiatedObject.transform.parent = this.GateParent; //親登録
                     //マウスポインタ位置に合わせる
                     Vector3 mousePos = Input.mousePosition;
@@ -97,6 +99,10 @@ public class HandManager : MonoBehaviour {
 
                     //マウス追従ライン削除
                     GameObject.Destroy(this.sockToMouseStreamLine);
+                    this.sockToMouseStreamLine = null;
+                    //手持ちオブジェクト削除
+                    this.takingInputSocketProperty.Value = null;
+                    this.takingOutputSocketProperty.Value = null;
 
                 }
                 break;
@@ -147,9 +153,6 @@ public class HandManager : MonoBehaviour {
 
     private void TryConnection() {
 
-        //マウス追従のLineを削除
-        GameObject.Destroy(this.sockToMouseStreamLine);
-
         object inputSocket, outputSocket;
 
         //両方notNull
@@ -158,24 +161,38 @@ public class HandManager : MonoBehaviour {
             && (!Circuit.HasConnection(inputSocket, outputSocket))) {
 
             //コネクション作成
-            Circuit.MakeConnection(inputSocket, outputSocket);
-            //Line作成
-            var lineControllerObj = GameObject.Instantiate(this.linePrefab);
-            lineControllerObj.transform.parent = this.GateParent;  //親設定
-            var lineController = lineControllerObj.GetComponent<LineController>();  //LineControllser取得
-            lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;  //追従Transform設定
-            lineController.bindedEndGameObject.Value = this.takingOutputSocketProperty.Value;
-            //Line一覧に追加
-            this.streamLines.Add(lineControllerObj);
+            if (Circuit.MakeConnection(inputSocket, outputSocket)) {
+
+                //マウス追従のLineを削除
+                GameObject.Destroy(this.sockToMouseStreamLine);
+
+                //Line作成
+                var lineControllerObj = GameObject.Instantiate(this.linePrefab);
+                lineControllerObj.transform.parent = this.GateParent;  //親設定
+                var lineController = lineControllerObj.GetComponent<LineController>();  //LineControllser取得
+                lineController.bindedStartGameObject.Value = this.takingInputSocketProperty.Value;  //追従Transform設定
+                lineController.bindedEndGameObject.Value = this.takingOutputSocketProperty.Value;
+                //Line一覧に追加
+                this.streamLines.Add(lineControllerObj);
+
+                if(inputSocket is InputSocket<bool>) {
+                    var ins = inputSocket as InputSocket<bool>;
+                    Debug.Log(ins.parentSocket.HasValue);
+                }
+
+                Debug.Log("Dane Connect");
+            }
+
             //手持ち割当削除
             this.takingInputSocketProperty.Value = null;
             this.takingOutputSocketProperty.Value = null;
 
-            Debug.Log("Dane Connect");
-
-        //片方Null
+            //片方Null
         } else if (((inputSocket = this.takingInputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)
             ^ ((outputSocket = this.takingOutputSocketProperty.Value?.GetComponent<ObjectAllocator>()?.allocatedObj) != null)) {
+
+            //マウス追従のLineを削除
+            GameObject.Destroy(this.sockToMouseStreamLine);
 
             //インスタンス生成
             this.sockToMouseStreamLine = GameObject.Instantiate(this.linePrefab);
@@ -191,6 +208,8 @@ public class HandManager : MonoBehaviour {
             }
 
         } else {
+            //マウス追従のLineを削除
+            GameObject.Destroy(this.sockToMouseStreamLine);
             Debug.Log("Failed Connect");
         }
 

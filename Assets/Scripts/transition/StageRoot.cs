@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class StageRoot : SectionRoot {
 
+    public CircuitStrage circuitStrage;
+
     public override void OnTransition() {
         base.OnTransition();
+        this.circuitStrage.circuit.Start();
 
-        Debug.Log("-> Stage");
+    }
 
+    public override void OnReaved() {
+        base.OnReaved();
+        this.circuitStrage.circuit.Stop();
     }
 
 }
